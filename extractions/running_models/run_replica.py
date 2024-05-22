@@ -26,7 +26,15 @@ def run_DNN_replica(kinematic_set, replica_number: int, base_dataframe: DataFram
     y_data_error = generated_replica_data[_COLUMN_NAME_CROSS_SECTION_ERROR]
     
     # (4): Split the Data into Training/Testing:
-    train_x_data, training_y_data, training_y_error_data, testing_x_data, testing_y_data, testing_y_error_data = split_data()
+    train_x_data, training_y_data, training_y_error_data, testing_x_data, testing_y_data, testing_y_error_data = split_data(x_data, y_data, y_data_error)
 
     # (5): Initialize the DNN:
     neural_network = deep_neural_network()
+
+    # (6): Perform the DNN Fitting Procedure:
+
+    # (7): Save the Model:
+
+    # (8): Perform the Calculation:
+
+    # (9): Make some Figures:
