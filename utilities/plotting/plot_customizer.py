@@ -131,6 +131,55 @@ class PlotCustomizer:
             if label:
                 self.axes_object.legend()
 
+    def add_errorbar_plot(
+            self,
+            x_data,
+            y_data,
+            y_errorbars,
+            x_errorbars,
+            label: str = "",
+            color = 'black',
+            marker = 'o'):
+        """
+        Add a scatter plot with errorbars to the Axes object.
+
+        Parameters
+        ----------
+        x_data: array_like
+            
+        y_data: array_like
+
+        x_errorbars: array_like
+            
+        y_errorbars: array_like
+
+        label: str
+
+        color: str |
+
+        marker: str
+        """
+
+        with rc_context(rc = self._custom_rc_params):
+
+            # (1): Add the errorbar plot:
+            self.axes_object.errorbar(
+                x = x_data,
+                y = y_data, 
+                yerr = y_errorbars,
+                xerr = x_errorbars,
+                label = label,
+                color = color,
+                marker = marker,
+                linestyle = '', 
+                markersize = 1.0,
+                ecolor = 'black',
+                elinewidth = 0.5,
+                capsize = 1)
+
+            if label:
+                self.axes_object.legend()
+
     def add_bar_plot(self, x_data, y_data_heights, label = "", color = None):
 
         with rc_context(rc = self._custom_rc_params):
