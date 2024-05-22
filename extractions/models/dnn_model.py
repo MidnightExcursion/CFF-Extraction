@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-def DNNmodel():
+def deep_neural_network():
 
     _HYPERPARAMETER_LEARNING_RATE = 0.001
     _HYPERPARAMETER_NUMBER_OF_EPOCHS = 1000

@@ -1,5 +1,8 @@
 from pandas import DataFrame
 
+from extractions.models.dnn_model import deep_neural_network
+
+from utilities.data_handling.split_ann_data import split_data
 from utilities.generation.generate_pseudodata import generate_replica_data
 
 from statics.strings.static_strings import _COLUMN_NAME_X_BJORKEN
@@ -22,8 +25,8 @@ def run_DNN_replica(kinematic_set, replica_number: int, base_dataframe: DataFram
     y_data = generated_replica_data[_COLUMN_NAME_CROSS_SECTION]
     y_data_error = generated_replica_data[_COLUMN_NAME_CROSS_SECTION_ERROR]
     
-    # (3): Split the Data into Training/Testing:
+    # (4): Split the Data into Training/Testing:
     train_x_data, training_y_data, training_y_error_data, testing_x_data, testing_y_data, testing_y_error_data = split_data()
 
-    # (4): Initialize the DNN:
-    neural_network = 0.
+    # (5): Initialize the DNN:
+    neural_network = deep_neural_network()
