@@ -28,7 +28,7 @@ def main(
         verbose: bool = False):
 
     # extractions > running_models > run_replica > run_DNN_replica
-    from extractions.running_models.run_replica import run_DNN_replica
+    from extractions.running_models.run_replica_method import run_replica_method
 
     # utilities > data_handling > pandas_reading > read_csv_file_with_pandas
     from utilities.data_handling.pandas_reading import read_csv_file_with_pandas
@@ -36,23 +36,41 @@ def main(
     # utilities > directories > find_directory
     from utilities.directories.searching_directories import find_directory
     
-    # (1): Construct the filepath to the data:
-    possible_data_path = f"{_DIRECTORY_DATA}\\{kinematics_dataframe_path}"
+    try:
 
-    # (2): Now, check if the kinematics is actually there:
-    kinematics_dataframe_file_path = find_directory(os.getcwd(possible_data_path))
+        # (1): Construct the filepath to the data:
+        possible_data_path = f"{_DIRECTORY_DATA}\\{kinematics_dataframe_path}"
 
-    # (3): If the file was there, turn it into a DF with Pandas:
-    kinematics_dataframe = read_csv_file_with_pandas(kinematics_dataframe_file_path)
+        if verbose:
+            print(f"> Possible data path is: {possible_data_path}")
 
-    # (4): Partition the DF on a fixed kinematic set:
-    fixed_kinematic_set_dataframe = kinematics_dataframe[kinematics_dataframe[_COLUMN_NAME_KINEMATIC_SET] == kinematic_set_number]
+        # (2): Now, check if the kinematics is actually there:
+        kinematics_dataframe_file_path = find_directory(os.getcwd(), possible_data_path)
 
-    # (5): Run the thing:
-    trained_neural_network = run_replica_method(fixed_kinematic_set_dataframe, number_of_replicas, verbose)
+        if verbose:
+            print(f"> Did we find the filepath for the kinematics? {kinematics_dataframe_file_path}")
 
-    # (6): Perform Analytics:
-    fit_neural_network(trained_neural_network)
+        # (3): If the file was there, turn it into a DF with Pandas:
+        kinematics_dataframe = read_csv_file_with_pandas(kinematics_dataframe_file_path)
+
+        if verbose:
+            print(f"> Did we convert the kinematics file to a Pandas DF? {kinematics_dataframe is not None}")
+
+        # (4): Partition the DF on a fixed kinematic set:
+        fixed_kinematic_set_dataframe = kinematics_dataframe[kinematics_dataframe[_COLUMN_NAME_KINEMATIC_SET] == kinematic_set_number]
+
+        if verbose:
+            print(f"> Did we manage to fix to a kinematic range? {fixed_kinematic_set_dataframe is not None}")
+
+        # (5): Run the thing:
+        trained_neural_network = run_replica_method(fixed_kinematic_set_dataframe, number_of_replicas, verbose)
+
+        # (6): Perform Analytics:
+        network_analytics = fit_neural_network(kinematics_dataframe, trained_neural_network)
+
+    except Exception as ERROR:
+        print(f"> Error when running main.py:\n{ERROR}")
+        return
 
 
 if __name__ == "__main__":

@@ -1,5 +1,9 @@
+
 # Native Library | datetime
 import datetime
+
+# External Library | Pandas
+from pandas import DataFrame
 
 # Native Library | TensorFlow
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
@@ -8,6 +12,8 @@ from utilities.data_handling.split_ann_data import split_data
 from utilities.generation.generate_pseudodata import generate_replica_data
 
 from utilities.directories.searching_directories import does_directory_exist
+
+from extractions.running_models.analytics import perform_replica_analytics
 
 from extractions.running_models.run_replica import run_DNN_replica
 
@@ -26,7 +32,10 @@ from statics.strings.static_strings import _HYPERPARAMETER_LR_FACTOR
 from statics.strings.static_strings import _HYPERPARAMETER_EARLYSTOP_PATIENCE_INTEGER
 from statics.strings.static_strings import _DNN_VERBOSE_SETTING
 
-def run_replica_method(kinematic_set_dataframe, number_of_replicas: int = 1, verbose: bool = False):
+def run_replica_method(
+        kinematic_set_dataframe: DataFrame,
+        number_of_replicas: int = 1,
+        verbose: bool = False):
     """
     # Description:
     
@@ -42,13 +51,13 @@ def run_replica_method(kinematic_set_dataframe, number_of_replicas: int = 1, ver
     """
 
     # (1): Begin iterating over the replicas:
-    for replica in range(number_of_replicas):
+    for replica_index in range(number_of_replicas):
 
         # (2): Begin timing the replica time:
         start_time_in_milliseconds = datetime.datetime.now().replace(microsecond = 0)
         
         if verbose:
-            print(f"> Replica #{replica + 1} now running...")
+            print(f"> Replica #{replica_index + 1} now running...")
 
         # (3): Generate the data for this DNN replica:
         generated_replica_data = generate_replica_data(kinematic_set_dataframe)
@@ -67,20 +76,22 @@ def run_replica_method(kinematic_set_dataframe, number_of_replicas: int = 1, ver
         neural_network, neural_network_history = run_DNN_replica(training_x_data, training_y_data, testing_x_data, testing_y_data)
 
         # (6): Save the Model in a Dedicated Directory:
-        model_file_name = f""
+        replica_number = replica_index + 1
+        model_file_name = f"replica_{replica_number}.h5"
         does_the_model_exist_already = does_directory_exist()
         neural_network.save(
-            model_file_name
+            model_file_name,
+            save_format = 'h5'
         )
 
         if does_the_model_exist_already:
             return False
-        else:
-            pass
 
         if verbose:
-            print(f"> Replica #{replica + 1} finished running...")
+            print(f"> Replica #{replica_index + 1} finished running...")
     
         end_time_in_milliseconds = datetime.datetime.now().replace(microsecond = 0)
 
         print(f"> Replica job finished in {end_time_in_milliseconds - start_time_in_milliseconds}ms.")
+
+        perform_replica_analytics(neural_network_history)
