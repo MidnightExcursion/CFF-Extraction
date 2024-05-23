@@ -13,10 +13,10 @@ from statics.strings.static_strings import _COLUMN_NAME_LEPTON_MOMENTUM
 from statics.strings.static_strings import _COLUMN_NAME_CROSS_SECTION
 from statics.strings.static_strings import _COLUMN_NAME_CROSS_SECTION_ERROR
 
-def run_DNN_replica(kinematic_set, replica_number: int, base_dataframe: DataFrame):
+def run_DNN_replica(kinematic_set_dataframe: DataFrame):
 
     # (1): Generate the data for this DNN replica:
-    generated_replica_data = generate_replica_data(base_dataframe)
+    generated_replica_data = generate_replica_data(kinematic_set_dataframe)
 
     # (2): Identify the "x values" for our model:
     x_data = generated_replica_data[[_COLUMN_NAME_Q_SQUARED, _COLUMN_NAME_X_BJORKEN, _COLUMN_NAME_T_MOMENTUM_CHANGE, _COLUMN_NAME_AZIMUTHAL_PHI, _COLUMN_NAME_LEPTON_MOMENTUM]]
