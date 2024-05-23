@@ -1,19 +1,14 @@
 import tensorflow as tf
 
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_LEARNING_RATE
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_REPLICAS
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_1
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_2
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_3
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_4
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_5
+
 def deep_neural_network():
-
-    _HYPERPARAMETER_LEARNING_RATE = 0.001
-    _HYPERPARAMETER_NUMBER_OF_EPOCHS = 1000
-    _HYPERPARAMETER_NUMBER_OF_REPLICAS = 300
-    _HYPERPARAMETER_EARLYSTOP_PATIENCE_INTEGER = 1000
-    _HYPERPARAMETER_LR_PATIENCE = 400
-    _HYPERPARAMETER_LR_FACTOR = 0.9
-
-    _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_1 = 480
-    _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_2 = 320
-    _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_3 = 32
-    _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_4 = 32
-    _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_5 = 4
 
     # (1): Initialize the Network with Uniform Random Sampling: [-0.1, -0.1]:
     initializer = tf.keras.initializers.RandomUniform(

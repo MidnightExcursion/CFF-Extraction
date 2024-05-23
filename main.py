@@ -27,9 +27,6 @@ def main(
         number_of_replicas: int,
         verbose: bool = False):
 
-    # Native Library | datetime
-    import datetime
-
     # extractions > running_models > run_replica > run_DNN_replica
     from extractions.running_models.run_replica import run_DNN_replica
 
@@ -37,7 +34,7 @@ def main(
     from utilities.data_handling.pandas_reading import read_csv_file_with_pandas
 
     # utilities > directories > find_directory
-    from utilities.directories.find_directory import find_directory
+    from utilities.directories.searching_directories import find_directory
     
     # (1): Construct the filepath to the data:
     possible_data_path = f"{_DIRECTORY_DATA}\\{kinematics_dataframe_path}"
@@ -51,22 +48,11 @@ def main(
     # (4): Partition the DF on a fixed kinematic set:
     fixed_kinematic_set_dataframe = kinematics_dataframe[kinematics_dataframe[_COLUMN_NAME_KINEMATIC_SET] == kinematic_set_number]
 
-    # (5): Begin timing the replica functions:
-    start_time_in_milliseconds = datetime.datetime.now().replace(microsecond = 0)
+    # (5): Run the thing:
+    trained_neural_network = run_replica_method(fixed_kinematic_set_dataframe, number_of_replicas, verbose)
 
-    for replica in range(number_of_replicas):
-        
-        if verbose:
-            print(f"> Replica #{replica + 1} now running...")
-
-        DNN_history = run_DNN_replica(fixed_kinematic_set_dataframe)
-
-        if verbose:
-            print(f"> Replica #{replica} finished running...")
-
-    end_time_in_milliseconds = datetime.datetime.now().replace(microsecond = 0)
-
-    print(f"> Replica job finished in {end_time_in_milliseconds - start_time_in_milliseconds}ms.")
+    # (6): Perform Analytics:
+    fit_neural_network(trained_neural_network)
 
 
 if __name__ == "__main__":
