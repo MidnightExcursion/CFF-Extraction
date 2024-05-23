@@ -1,7 +1,10 @@
 # Native Library | os
 import os
 
-def find_directory(base_directory: str, additional_directory_info: str):
+# Native Library | errno
+import errno
+
+def find_directory(base_directory: str, additional_directory_info: str) -> os.path:
     """
     # Description:
 
@@ -13,16 +16,36 @@ def find_directory(base_directory: str, additional_directory_info: str):
 
     base_directory: str
     additional_directory_info: str
+    
+    # Returns
+
+    directory_path: bool | False
     """
     try:
         directory_path = os.path.join(base_directory, additional_directory_info)
         return directory_path
     except Exception as ERROR:
         print(f"> Error in finding directory:\n{ERROR}")
-        return None
+        
+        raise FileNotFoundError(
+            errno.ENOENT, os.strerror(errno.ENOENT), f"{base_directory}/{additional_directory_info}")
     
-def does_directory_exist(path_to_directory: os.path):
-    
+def does_directory_exist(path_to_directory: os.path) -> bool:
+    """
+    # Description:
+
+    Here, we just look for a given os.path within a given
+    directory context.
+
+    # Arguments:
+
+    path_to_directory: os.path
+
+    # Returns:
+
+    does_the_path_exist: bool | False
+    """
+
     try:
 
         does_the_path_exist = os.path.exists(path_to_directory)

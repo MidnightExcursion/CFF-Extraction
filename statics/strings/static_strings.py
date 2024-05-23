@@ -1,6 +1,18 @@
 
 # Directory Layout:
+
+# Directory | base > data
 _DIRECTORY_DATA = 'data'
+
+
+# Directory | base > extractions
+_DIRECTORY_EXTRACTIONS = 'data'
+
+# Directory | base > extractions > models
+_DIRECTORY_EXTRACTIONS_MODELS_ = 'models'
+
+# Directory | base > extractions > models > _DIRECTORY_EXTRACTIONS__MODELS_KINEMATIC_SETS
+_DIRECTORY_EXTRACTIONS__MODELS_KINEMATIC_SETS = 'kinematic_sets'
 
 # argparse: static strings:
 _ARGPARSE_DESCRIPTION = "Run DNN Replicas to extract the CFFs."
