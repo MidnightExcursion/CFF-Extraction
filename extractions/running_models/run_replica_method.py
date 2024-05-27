@@ -69,6 +69,7 @@ def run_replica_method(
 
         # (3): Generate the data for this DNN replica:
         generated_replica_data = generate_replica_data(kinematic_set_dataframe)
+        print(generated_replica_data)
 
         # (4): Identify the "x values" for our model:
         x_data = generated_replica_data[[_COLUMN_NAME_Q_SQUARED, _COLUMN_NAME_X_BJORKEN, _COLUMN_NAME_T_MOMENTUM_CHANGE, _COLUMN_NAME_AZIMUTHAL_PHI, _COLUMN_NAME_LEPTON_MOMENTUM]]
