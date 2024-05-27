@@ -17,22 +17,28 @@ def run_DNN_replica(
         testing_x_data: DataFrame,
         testing_y_data: DataFrame):
 
-    # (1): Initialize the DNN -- Look at this function to see how the DNN is customized"
-    neural_network = deep_neural_network()
-    
-    # (2): Fit the Model:
-    neural_network_training_history = neural_network.fit(
-        training_x_data,
-        training_y_data,
-        validation_data = (testing_x_data, testing_y_data),
-        epochs = _HYPERPARAMETER_NUMBER_OF_EPOCHS,
-        callbacks = [
-            ReduceLROnPlateau(monitor = 'loss', factor = _HYPERPARAMETER_LR_FACTOR, patience = _HYPERPARAMETER_LR_PATIENCE, mode = 'auto'),
-            EarlyStopping(monitor = 'loss',patience = _HYPERPARAMETER_EARLYSTOP_PATIENCE_INTEGER)
-        ],
-        batch_size = _HYPERPARAMETER_BATCH_SIZE,
-        verbose = _DNN_VERBOSE_SETTING
-    )
+    try:
 
-    # (3): Return the history/diagnostic data from the training:
-    return neural_network, neural_network_training_history
+        # (1): Initialize the DNN -- Look at this function to see how the DNN is customized"
+        neural_network = deep_neural_network()
+        
+        # (2): Fit the Model:
+        neural_network_training_history = neural_network.fit(
+            training_x_data,
+            training_y_data,
+            validation_data = (testing_x_data, testing_y_data),
+            epochs = _HYPERPARAMETER_NUMBER_OF_EPOCHS,
+            callbacks = [
+                ReduceLROnPlateau(monitor = 'loss', factor = _HYPERPARAMETER_LR_FACTOR, patience = _HYPERPARAMETER_LR_PATIENCE, mode = 'auto'),
+                EarlyStopping(monitor = 'loss',patience = _HYPERPARAMETER_EARLYSTOP_PATIENCE_INTEGER)
+            ],
+            batch_size = _HYPERPARAMETER_BATCH_SIZE,
+            verbose = _DNN_VERBOSE_SETTING
+        )
+
+        # (3): Return the history/diagnostic data from the training:
+        return neural_network, neural_network_training_history
+    
+    except Exception as ERROR:
+        print(f"> Error in running the DNN replica:\n{ERROR}")
+        return [], []
