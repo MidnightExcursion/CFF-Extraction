@@ -16,7 +16,7 @@ from utilities.generation.generate_pseudodata import generate_replica_data
 
 from utilities.directories.searching_directories import find_directory
 
-from extractions.running_models.analytics import perform_replica_analytics
+from extractions.running_models.analytics import perform_replica_analytics, construct_network_loss_plot, construct_network_validation_loss_plot
 
 from extractions.running_models.run_replica import run_DNN_replica
 
@@ -106,4 +106,13 @@ def run_replica_method(
 
         print(f"> Replica job finished in {end_time_in_milliseconds - start_time_in_milliseconds}ms.")
 
+        # (10): Obtain the networks' validation loss and loss:
+        network_loss = neural_network_history.history['loss']
+        network_validation_loss = neural_network_history.history['val_loss']
+
         perform_replica_analytics(neural_network_history)
+
+        construct_network_loss_plot(network_loss)
+
+        construct_network_validation_loss_plot(network_validation_loss)
+
