@@ -19,6 +19,8 @@ from statics.strings.static_strings import _COLUMN_NAME_T_MOMENTUM_CHANGE
 from statics.strings.static_strings import _COLUMN_NAME_AZIMUTHAL_PHI
 from statics.strings.static_strings import _COLUMN_NAME_LEPTON_MOMENTUM 
 
+from statics.strings.static_strings import _HYPERPARAMETER_NUMBER_OF_EPOCHS
+
 def perform_replica_analytics(entire_dataframe, trained_neural_network):
 
     # (1): Obtain the kinematics of the entire dataframe:
@@ -41,7 +43,7 @@ def perform_replica_analytics(entire_dataframe, trained_neural_network):
     print(f"> Predicted cross section to be: {predicted_cross_sections}")
 
 
-def construct_network_loss_plot(number_of_epochs, network_loss_data):
+def construct_network_loss_plot(network_loss_data):
 
     # (1): Set up the Figure instance
     figure_instance = figure(figsize = (18, 6))
@@ -58,14 +60,16 @@ def construct_network_loss_plot(number_of_epochs, network_loss_data):
     
     # (4): Add data to the Axes Object:
     plot_customization.add_line_plot(
-        arange(number_of_epochs), 
+        arange(_HYPERPARAMETER_NUMBER_OF_EPOCHS), 
         network_loss_data,  
         label = "Network Loss",
         color = 'blue')
     
-    figure_instance.savefig('fuck')
+    figure_instance.show()
+    figure_instance.savefig('COCKZ')
+    figure_instance.close()
 
-def construct_network_validation_loss_plot(number_of_epochs, network_validation_loss_data):
+def construct_network_validation_loss_plot(network_validation_loss_data):
 
     # (1): Set up the Figure instance
     figure_instance = figure(figsize = (18, 6))
@@ -82,9 +86,11 @@ def construct_network_validation_loss_plot(number_of_epochs, network_validation_
     
     # (4): Add data to the Axes Object:
     plot_customization.add_line_plot(
-        arange(number_of_epochs), 
+        arange(_HYPERPARAMETER_NUMBER_OF_EPOCHS), 
         network_validation_loss_data,  
         label = "Network Loss",
         color = 'blue')
     
-    figure_instance.savefig('fuck')
+    figure_instance.show()
+    figure_instance.savefig('LOLER')
+    figure_instance.close()
