@@ -2,7 +2,7 @@
 from numpy import array
 
 # External Library | TensorFlow
-from tensorflow.keras.backend import function
+from tensorflow.keras import backend
 
 # External Library | Matplotlib
 from matplotlib.pyplot import figure
@@ -28,7 +28,7 @@ def perform_replica_analytics(entire_dataframe, trained_neural_network):
     
     # (2): Plug-and-chug the DF numbers into the trained DNN to get the CFFs!
     predicted_cffs = array(
-        function(
+        backend.function(
             trained_neural_network.get_layer(name = 'input_layer').input,
             trained_neural_network.get_layer(name = 'cff_output_layer').output)(all_dataframe_kinematics))
     
@@ -36,7 +36,7 @@ def perform_replica_analytics(entire_dataframe, trained_neural_network):
 
     # (3); Plug-and-chug the numbers to get the CROSS SECTION!
     predicted_cross_sections = array(
-        function(
+        backend.function(
             trained_neural_network.get_layer(name = 'input_layer').input,
             trained_neural_network.get_layer(name = 'TotalFLayer').output)(all_dataframe_kinematics))
     
