@@ -21,6 +21,11 @@ def run_DNN_replica(
 
         # (1): Initialize the DNN -- Look at this function to see how the DNN is customized"
         neural_network = deep_neural_network()
+
+        print(training_x_data)
+        print(training_y_data)
+        print(testing_x_data)
+        print(testing_y_data)
         
         # (2): Fit the Model:
         neural_network_training_history = neural_network.fit(

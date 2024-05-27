@@ -21,7 +21,7 @@ def deep_neural_network():
         seed = None)
 
     # (2) Make the TF Input Layer:
-    inputs = tf.keras.Input(shape=(5), name='input_layer')
+    inputs = tf.keras.Input(shape=(5,), name = 'input_layer')
     
     # (3): Define the five inputs to the network:
     QQ, x_b, t, phi, k = tf.split(inputs, num_or_size_splits = 5, axis = 1)
