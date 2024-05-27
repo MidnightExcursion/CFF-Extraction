@@ -65,9 +65,6 @@ def main(
         # (5): Run the thing:
         trained_neural_network = run_replica_method(fixed_kinematic_set_dataframe, number_of_replicas, verbose)
 
-        # (6): Perform Analytics:
-        network_analytics = fit_neural_network(kinematics_dataframe, trained_neural_network)
-
     except Exception as ERROR:
         print(f"> Error when running main.py:\n{ERROR}")
         return

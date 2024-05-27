@@ -99,13 +99,11 @@ def run_replica_method(
             save_format = 'h5'
         )
 
-        print(f"> Saved replica!" )
-
         if verbose:
-            print(f"> Replica #{replica_index + 1} finished running...")
+            print(f"> Replica #{replica_number} finished running...")
     
         end_time_in_milliseconds = datetime.datetime.now().replace(microsecond = 0)
 
         print(f"> Replica job finished in {end_time_in_milliseconds - start_time_in_milliseconds}ms.")
 
-        # perform_replica_analytics(neural_network_history)
+        perform_replica_analytics(neural_network_history)
