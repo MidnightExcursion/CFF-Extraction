@@ -13,8 +13,12 @@ from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUM
 from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_5
 
 def deep_neural_network():
+
+    print('fuci')
     
     try:
+
+        print('cock')
 
         # (1): Initialize the Network with Uniform Random Sampling: [-0.1, -0.1]:
         initializer = tf.keras.initializers.RandomUniform(
@@ -23,10 +27,12 @@ def deep_neural_network():
             seed = None)
 
         # (2) Make the TF Input Layer:
-        inputs = tf.keras.Input(shape=(5, ), name='input_layer')
+        inputs = tf.keras.Input(shape=(5, ), name = 'input_layer')
+        print(inputs)
         
         # (3): Define the five inputs to the network:
-        QQ, x_b, t, phi, k = tf.split(inputs, num_or_size_splits = 5, axis = 1)
+        # QQ, x_b, t, phi, k = tf.split(inputs, num_or_size_splits = 5, axis = 1)
+        QQ, x_b, t, phi, k = tf.keras.layers.Lambda(lambda x: tf.split(x, num_or_size_splits=5, axis=1))(inputs)
 
         # (4): Combine the kinematics as a single list:
         kinematics = tf.keras.layers.concatenate([QQ, x_b, t])
@@ -37,10 +43,10 @@ def deep_neural_network():
         x3 = tf.keras.layers.Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_3, activation = "relu", kernel_initializer = initializer)(x2)
         x4 = tf.keras.layers.Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_4, activation = "relu", kernel_initializer = initializer)(x3)
         outputs = tf.keras.layers.Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_5, activation = "linear", kernel_initializer = initializer, name = 'cff_output_layer')(x4)
-        
+
         # (6): We need both the Kinematics and the CFFs to evaluate the cross section:
         total_FInputs = tf.keras.layers.concatenate([inputs, outputs], axis = 1)
-        
+
         # (7): Compute, algorithmically, the cross section:
         TotalF = TotalFLayer(name = 'TotalFLayer')(total_FInputs)
 
@@ -58,3 +64,5 @@ def deep_neural_network():
 
     except Exception as ERROR:
         print(f"> Error in running DNN model:\n{ERROR}")
+
+        return 0.
