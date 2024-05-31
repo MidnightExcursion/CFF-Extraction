@@ -24,10 +24,13 @@ def deep_neural_network():
     inputs = tf.keras.Input(shape=(5,), name = 'input_layer')
     
     # (3): Define the five inputs to the network:
-    QQ, x_b, t, phi, k = tf.split(inputs, num_or_size_splits = 5, axis = 1)
+    # QQ, x_b, t, phi, k = tf.split(inputs[:, :5], num_or_size_splits = 5, axis = 1)
 
-    # (4): Combine the kinematics as a single list:
-    kinematics = tf.keras.layers.concatenate([QQ, x_b, t])
+    # # (4): Combine the kinematics as a single list:
+    # kinematics = tf.keras.layers.concatenate([QQ, x_b, t])
+
+    kinematics = inputs[:, :3]  # Extract the kinematics part of the inputs
+    # cffs = inputs[:, 5:]
 
     # (5): Define the Model Architecture:
     x1 = tf.keras.layers.Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_1, activation = "relu", kernel_initializer = initializer)(kinematics)
@@ -43,7 +46,7 @@ def deep_neural_network():
     TotalF = TotalFLayer(name = 'TotalFLayer')(total_FInputs)
 
     # (8): Define the model as as Keras Model:
-    tfModel = tf.keras.Model(inputs=inputs, outputs = TotalF, name = "tfmodel")
+    tfModel = tf.keras.Model(inputs = inputs, outputs = TotalF, name = "tfmodel")
 
     # (9): Compile the model:
     tfModel.compile(

@@ -16,16 +16,27 @@ def run_DNN_replica(
         training_y_data: DataFrame,
         testing_x_data: DataFrame,
         testing_y_data: DataFrame):
+    """
+    # Description:
+    Run a single DNN replica.
+
+    # Parameters:
+
+    training_x_data: Pandas DataFrame
+
+    training_y_data: Pandas DataFrame
+
+    testing_x_data: Pandas DataFrame
+
+    testing_y_data: Pandas DataFrame
+
+    # Returns
+    """
 
     try:
 
         # (1): Initialize the DNN -- Look at this function to see how the DNN is customized"
         neural_network = deep_neural_network()
-
-        print(training_x_data)
-        print(training_y_data)
-        print(testing_x_data)
-        print(testing_y_data)
         
         # (2): Fit the Model:
         neural_network_training_history = neural_network.fit(

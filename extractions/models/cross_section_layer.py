@@ -13,8 +13,7 @@ class TotalFLayer(Layer):
     def __init__(self, **kwargs):
 
         super(TotalFLayer, self).__init__(**kwargs)
-
-        print('fuckfuckf')
+        self.bhdvcstf = BHDVCStf()
 
     def call(self, inputs):
         """
@@ -23,8 +22,7 @@ class TotalFLayer(Layer):
         physical quantities:
         Q^{2}, x_{B}, t , \phi, k, CFF1, CFF2, CFF3, CFF4 
         """
-        insane_calcs = BHDVCStf()
-        return BHDVCStf().curve_fit(inputs[:, 0:5], inputs[:, 5:9])
+        return self.bhdvcstf.curve_fit(inputs[:, 0:5], inputs[:, 5:9])
     
 class BHDVCStf(object):
 
@@ -272,7 +270,6 @@ class BHDVCStf(object):
 
     @tf.function
     def curve_fit(self, kins, cffs):
-        print('fuckfuckf')
         calc = F1F2()
         QQ, x, t, phi, k = tf.split(kins, num_or_size_splits=5, axis=1)
         F1, F2 = calc.f1_f21(t) # calculating F1 and F2 using passed data as opposed to passing in F1 and F2
