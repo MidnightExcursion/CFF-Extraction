@@ -87,7 +87,7 @@ def run_replica_method(
         replica_number = replica_index + 1
 
         # (7): Propose a replica name:
-        model_file_name = f"replica_{replica_number}.h5"
+        model_file_name = f"replica_{replica_number}"
 
         # (8): Propose a file path to save the replica data and then just find it:
         possible_data_path = f"{_DIRECTORY_EXTRACTIONS}\\{_DIRECTORY_EXTRACTIONS_MODELS_}//{_DIRECTORY_EXTRACTIONS__MODELS_KINEMATIC_SETS}"
@@ -95,8 +95,8 @@ def run_replica_method(
 
         # (9): Hopefully (8) worked, then just save the data there:
         neural_network.save(
-            f"{directory_for_model_data}/{model_file_name}",
-            save_format = 'h5'
+            f"{directory_for_model_data}/{model_file_name}.keras",
+            save_format = 'keras'
         )
 
         if verbose:
@@ -110,9 +110,11 @@ def run_replica_method(
         network_loss = neural_network_history.history['loss']
         network_validation_loss = neural_network_history.history['val_loss']
 
-        perform_replica_analytics(neural_network_history)
+        # perform_replica_analytics(neural_network_history)
 
+        # (): Construct a plot that show the Network Loss vs. Epoch
         construct_network_loss_plot(network_loss)
 
+        # (): Construct a plot that show the Network Validation Loss vs. Epoch
         construct_network_validation_loss_plot(network_validation_loss)
 

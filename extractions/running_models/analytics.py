@@ -5,7 +5,7 @@ from numpy import array
 from tensorflow.keras import backend
 
 # External Library | Matplotlib
-from matplotlib.pyplot import figure
+import matplotlib.pyplot as plt
 
 # External Library | NumPy
 from numpy import arange
@@ -46,7 +46,7 @@ def perform_replica_analytics(entire_dataframe, trained_neural_network):
 def construct_network_loss_plot(network_loss_data):
 
     # (1): Set up the Figure instance
-    figure_instance = figure(figsize = (18, 6))
+    figure_instance = plt.figure(figsize = (18, 6))
 
     # (2): Add an Axes Object:
     axis_instance = figure_instance.add_subplot(1, 1, 1)
@@ -54,9 +54,9 @@ def construct_network_loss_plot(network_loss_data):
     # (3): Customize the Axes Object:
     plot_customization = PlotCustomizer(
         axis_instance,
-        title = r"$f(x) = \left( sin(15 x) cos(x) \right)^{5} + sin(x) e^{x}$",
-        xlabel = r"$x$",
-        ylabel = r"$f(x)$")
+        title = r"Loss vs. Epoch",
+        xlabel = r"Epoch",
+        ylabel = r"Loss")
     
     # (4): Add data to the Axes Object:
     plot_customization.add_line_plot(
@@ -65,14 +65,12 @@ def construct_network_loss_plot(network_loss_data):
         label = "Network Loss",
         color = 'blue')
     
-    figure_instance.show()
-    figure_instance.savefig('COCKZ')
-    figure_instance.close()
+    figure_instance.savefig('COCKZ.jpg')
 
 def construct_network_validation_loss_plot(network_validation_loss_data):
 
     # (1): Set up the Figure instance
-    figure_instance = figure(figsize = (18, 6))
+    figure_instance = plt.figure(figsize = (18, 6))
 
     # (2): Add an Axes Object:
     axis_instance = figure_instance.add_subplot(1, 1, 1)
@@ -80,17 +78,15 @@ def construct_network_validation_loss_plot(network_validation_loss_data):
     # (3): Customize the Axes Object:
     plot_customization = PlotCustomizer(
         axis_instance,
-        title = r"$f(x) = \left( sin(15 x) cos(x) \right)^{5} + sin(x) e^{x}$",
-        xlabel = r"$x$",
-        ylabel = r"$f(x)$")
+        title = r"Validation Loss vs. Epoch",
+        xlabel = r"Epoch",
+        ylabel = r"Validation")
     
     # (4): Add data to the Axes Object:
     plot_customization.add_line_plot(
         arange(_HYPERPARAMETER_NUMBER_OF_EPOCHS), 
         network_validation_loss_data,  
-        label = "Network Loss",
+        label = "Validation Loss",
         color = 'blue')
     
-    figure_instance.show()
-    figure_instance.savefig('LOLER')
-    figure_instance.close()
+    figure_instance.savefig('LOLER.jpg')
