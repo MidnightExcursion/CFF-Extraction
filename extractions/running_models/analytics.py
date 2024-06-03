@@ -1,9 +1,14 @@
 # External Library | numpy
 from numpy import array
 
+# External Library | Matplotlib
+import matplotlib.pyplot as plt
+
 # Native Library | TensorFlow
 import tensorflow as tf
 from tensorflow.keras.models import Model
+
+from utilities.plotting.plot_customizer import PlotCustomizer
 
 from statics.strings.static_strings import _COLUMN_NAME_X_BJORKEN
 from statics.strings.static_strings import _COLUMN_NAME_Q_SQUARED
@@ -52,3 +57,26 @@ def perform_replica_analytics(entire_dataframe, trained_neural_network):
     predicted_cross_sections = array(predict_cross_sections(all_dataframe_kinematics))
     
     print(predicted_cross_sections)
+
+def plot_data(x_data, y_data, plot_title = "", x_label = "", y_label = ""):
+    
+    # (1): Set up the Figure instance
+    figure_instance = plt.figure(figsize = (18, 6))
+
+    # (2): Add an Axes Object:
+    axis_instance = figure_instance.add_subplot(1, 1, 1)
+    
+    # (3): Customize the Axes Object:
+    plot_customization = PlotCustomizer(
+        axis_instance,
+        title = plot_title,
+        xlabel = x_label,
+        ylabel = y_label)
+    
+    # (4): Add data to the Axes Object:
+    plot_customization.add_line_plot(
+        x_data, 
+        y_data,  
+        color = 'black')
+    
+    plt.show()

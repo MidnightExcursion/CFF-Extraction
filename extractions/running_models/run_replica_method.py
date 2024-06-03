@@ -6,6 +6,9 @@ import os
 import datetime
 
 # External Library | Pandas
+import numpy as np
+
+# External Library | Pandas
 from pandas import DataFrame
 
 # Native Library | TensorFlow
@@ -16,9 +19,9 @@ from utilities.generation.generate_pseudodata import generate_replica_data
 
 from utilities.directories.searching_directories import find_directory
 
-from extractions.running_models.analytics import perform_replica_analytics
-
+from extractions.running_models.analytics import perform_replica_analytics, plot_data
 from extractions.running_models.run_replica import run_DNN_replica
+from extractions.running_models.obtain_replica_results import obtain_replica_results
 
 from statics.strings.static_strings import _DIRECTORY_EXTRACTIONS, _DIRECTORY_EXTRACTIONS_MODELS_, _DIRECTORY_EXTRACTIONS__MODELS_KINEMATIC_SETS
 
@@ -41,6 +44,7 @@ from statics.strings.static_strings import _DNN_VERBOSE_SETTING
 from statics.strings.static_strings import _COLUMN_NAME_KINEMATIC_SET
 
 def run_replica_method(
+        entire_kinematic_dataframe: DataFrame,
         kinematic_set_dataframe: DataFrame,
         number_of_replicas: int = 1,
         verbose: bool = False):
@@ -109,3 +113,14 @@ def run_replica_method(
         print(f"> Replica job finished in {end_time_in_milliseconds - start_time_in_milliseconds}ms.")
 
         perform_replica_analytics(kinematic_set_dataframe, neural_network)
+
+        print(neural_network_history.history['loss'])
+
+        plot_data(
+            x_data = np.linspace(0, len(neural_network_history.history['loss']), _HYPERPARAMETER_NUMBER_OF_EPOCHS),
+            y_data = neural_network_history.history['loss'],
+            plot_title = "Loss",
+            x_label = "Epoch",
+            y_label = "Loss")
+
+        obtain_replica_results(entire_kinematic_dataframe, neural_network)

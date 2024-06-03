@@ -11,5 +11,22 @@ The Proton, as we understand it, has a half-integer spin (1/2). The observation 
 
 # The Objective of the Code
 
-Well, I'm working on it.
+Use a DNN approach to try to find the functional form of the Compton Form Factors (CFFs).
 
+# The Replica Method Summarized:
+
+## The "Chronology" of the Procedure:
+
+1. We specify the number of Replicas we want to run. That is a number that we will symbolically call $N_{\text{replicas}}$. 
+
+2. We then generate "pseudodata" for each Replica. That will become the training, testing, and validation data for our ANN.
+
+3. We split the pseudodata into the training, testing, and validation data.
+
+4. Then, we initialize the DNN. It's critical to understand the that DNN is exactly the same every time apart from the random sampling of the weights and biases upon initialization of the DNN.
+
+5. We train the DNN for $N_{\text{epochs}}$. 
+
+6. Then, we see what the results are for that Replica. These come in the form of fancy plots.
+
+7. That was all for a single Replica. 
