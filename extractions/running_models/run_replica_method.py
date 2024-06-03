@@ -108,4 +108,4 @@ def run_replica_method(
 
         print(f"> Replica job finished in {end_time_in_milliseconds - start_time_in_milliseconds}ms.")
 
-        # perform_replica_analytics(neural_network_history)
+        perform_replica_analytics(kinematic_set_dataframe, neural_network)

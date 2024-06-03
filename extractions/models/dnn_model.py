@@ -51,16 +51,16 @@ def deep_neural_network():
         TotalF = TotalFLayer(name = 'TotalFLayer')(total_FInputs)
 
         # (8): Define the model as as Keras Model:
-        tfModel = tf.keras.Model(inputs=inputs, outputs = TotalF, name = "tfmodel")
+        tfCrossSectionModel = tf.keras.Model(inputs=inputs, outputs = TotalF, name = "tfmodel")
 
         # (9): Compile the model:
-        tfModel.compile(
+        tfCrossSectionModel.compile(
             optimizer = tf.keras.optimizers.Adam(_HYPERPARAMETER_LEARNING_RATE),
             loss = tf.keras.losses.MeanSquaredError()
         )
 
         # (10): Return the model:
-        return tfModel
+        return tfCrossSectionModel
 
     except Exception as ERROR:
         print(f"> Error in running DNN model:\n{ERROR}")
