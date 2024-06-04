@@ -20,6 +20,8 @@ from utilities.generation.generate_pseudodata import generate_replica_data
 from utilities.directories.handling_directories import create_replica_directories
 from utilities.directories.handling_directories import create_replica_model_directories
 from utilities.directories.handling_directories import create_replica_plots_directories
+from utilities.directories.handling_directories import find_replica_model_directories
+from utilities.directories.handling_directories import find_replica_plots_directories
 
 from extractions.running_models.analytics import perform_replica_analytics, construct_plot_data
 from extractions.running_models.run_replica import run_DNN_replica
@@ -82,34 +84,34 @@ def run_replica_method(
         did_we_create_replica_model_directory = create_replica_model_directories(kinematic_set_integer, replica_number)
         did_we_create_replica_plots_directory = create_replica_plots_directories(kinematic_set_integer, replica_number)
 
-        # (2): Begin timing the replica time:
+        # (1.5): Begin timing the replica time:
         start_time_in_milliseconds = datetime.datetime.now().replace(microsecond = 0)
         
         if verbose:
             print(f"> Replica #{replica_index + 1} now running...")
 
-        # (3): Generate the data for this DNN replica:
+        # (1.6): Generate the data for this DNN replica:
         generated_replica_data = generate_replica_data(kinematic_set_dataframe)
 
-        # (4): Identify the "x values" for our model:
+        # (1.7): Identify the "x values" for our model:
         x_data = generated_replica_data[[_COLUMN_NAME_Q_SQUARED, _COLUMN_NAME_X_BJORKEN, _COLUMN_NAME_T_MOMENTUM_CHANGE, _COLUMN_NAME_AZIMUTHAL_PHI, _COLUMN_NAME_LEPTON_MOMENTUM]]
 
-        # (5): Identify the "y values" for our model:
+        # (1.8): Identify the "y values" for our model:
         y_data = generated_replica_data[_COLUMN_NAME_CROSS_SECTION]
         y_data_error = generated_replica_data[_COLUMN_NAME_CROSS_SECTION_ERROR]
         
-        # (6): Split the Data into Training/Testing:
+        # (1.9): Split the Data into Training/Testing:
         training_x_data, training_y_data, training_y_error_data, testing_x_data, testing_y_data, testing_y_error_data = split_data(x_data, y_data, y_data_error)
 
-        # (7): Actually run the Replica:
+        # (1.10): Actually run the Replica:
         neural_network, neural_network_history = run_DNN_replica(training_x_data, training_y_data, testing_x_data, testing_y_data)
 
-        directory_for_replica_model = 
+        # (1.11): Find the directory where the Replica lives (to save it in the next line):
+        directory_for_replica_model = find_replica_model_directories(kinematic_set_integer, replica_number)
 
-        # (9): Hopefully (8) worked, then just save the data there:
+        # (1.12): Now, just save it:
         neural_network.save(
-            directory_for_replica_model,
-            save_format = 'h5'
+            f"{directory_for_replica_model}/{current_replica_name}.keras"
         )
 
         print(f"> Saved replica!" )
@@ -121,15 +123,29 @@ def run_replica_method(
 
         print(f"> Replica job finished in {end_time_in_milliseconds - start_time_in_milliseconds}ms.")
 
-        perform_replica_analytics(kinematic_set_dataframe, neural_network)
+        # perform_replica_analytics(kinematic_set_dataframe, neural_network)
 
-        print(neural_network_history.history['loss'])
+        ann_training_loss_history_array = neural_network_history.history['loss']
+        ann_validation_loss_history_array = neural_network_history.history['val_loss']
 
-        construct_plot_data(
-            x_data = np.linspace(0, len(neural_network_history.history['loss']), _HYPERPARAMETER_NUMBER_OF_EPOCHS),
+        directory_for_replica_plots = find_replica_plots_directories(kinematic_set_integer, replica_number)
+
+        training_loss_versus_epoch_plot = construct_plot_data(
+            x_data = np.linspace(0, len(ann_training_loss_history_array), _HYPERPARAMETER_NUMBER_OF_EPOCHS),
             y_data = neural_network_history.history['loss'],
-            plot_title = "Loss",
+            plot_title = "Tracking Loss during Training",
             x_label = "Epoch",
             y_label = "Loss")
+        
+        training_loss_versus_epoch_plot.savefig(f"{directory_for_replica_plots}/training_loss.png")
+        
+        validation_loss_versus_epoch_plot = construct_plot_data(
+            x_data = np.linspace(0, len(ann_validation_loss_history_array), _HYPERPARAMETER_NUMBER_OF_EPOCHS),
+            y_data = neural_network_history.history['loss'],
+            plot_title = "Tracking Validation Loss ",
+            x_label = "Epoch",
+            y_label = "Validation Loss")
+        
+        validation_loss_versus_epoch_plot.savefig(f"{directory_for_replica_plots}/validation_loss.png")
 
         obtain_replica_results(entire_kinematic_dataframe, neural_network)

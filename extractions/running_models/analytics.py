@@ -50,15 +50,14 @@ def perform_replica_analytics(entire_dataframe, trained_neural_network):
     
     # (4): Plug-and-chug the DF numbers into the trained DNN to get the CFFs!
     predicted_cffs = array(predict_cffs(all_dataframe_kinematics))
-    
-    print(predicted_cffs)
 
     # (5) Plug-and-chug the numbers to get the CROSS SECTION!
     predicted_cross_sections = array(predict_cross_sections(all_dataframe_kinematics))
-    
-    print(predicted_cross_sections)
 
 def construct_plot_data(x_data, y_data, plot_title = "", x_label = "", y_label = ""):
+    """
+    
+    """
     
     # (1): Set up the Figure instance
     figure_instance = plt.figure(figsize = (18, 6))
@@ -79,4 +78,4 @@ def construct_plot_data(x_data, y_data, plot_title = "", x_label = "", y_label =
         y_data,  
         color = 'black')
     
-    plt.show()
+    return figure_instance
