@@ -6,6 +6,8 @@ import os
 
 from extractions.extract import extraction
 
+from statics.strings.static_strings import _DIRECTORY_DATA
+
 from statics.strings.static_strings import _ARGPARSE_DESCRIPTION
 
 from statics.strings.static_strings import _ARGPARSE_ARGUMENT_INPUT_DATAFILE
@@ -18,11 +20,17 @@ from statics.strings.static_strings import _ARGPARSE_ARGUMENT_DESCRIPTION_KINEMA
 from statics.strings.static_strings import _ARGPARSE_ARGUMENT_DESCRIPTION_NUMBER_REPLICAS
 from statics.strings.static_strings import _ARGPARSE_ARGUMENT_DESCRIPTION_VERBOSE
 
+# DataFrame Columns
+from statics.strings.static_strings import _COLUMN_NAME_KINEMATIC_SET
+
 def main(
         kinematics_dataframe_path: str,
         kinematic_set_number: int,
         number_of_replicas: int,
         verbose: bool = False):
+
+    # extractions > running_models > run_replica > run_DNN_replica
+    from extractions.running_models.run_replica_method import run_replica_method
     
     try:
 
@@ -30,6 +38,9 @@ def main(
         kinematic_set_number,
         number_of_replicas,
         verbose)
+
+        # (5): Run the thing:
+        trained_neural_network = run_replica_method(fixed_kinematic_set_dataframe, number_of_replicas, verbose)
 
     except Exception as ERROR:
         print(f"> Error when running main.py:\n{ERROR}")

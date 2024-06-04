@@ -17,7 +17,9 @@ from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from utilities.data_handling.split_ann_data import split_data
 from utilities.generation.generate_pseudodata import generate_replica_data
 
-from utilities.directories.handling_directories import find_directory
+from utilities.directories.handling_directories import create_replica_directories
+from utilities.directories.handling_directories import create_replica_model_directories
+from utilities.directories.handling_directories import create_replica_plots_directories
 
 from extractions.running_models.analytics import perform_replica_analytics, construct_plot_data
 from extractions.running_models.run_replica import run_DNN_replica
@@ -46,6 +48,7 @@ from statics.strings.static_strings import _COLUMN_NAME_KINEMATIC_SET
 def run_replica_method(
         entire_kinematic_dataframe: DataFrame,
         kinematic_set_dataframe: DataFrame,
+        kinematic_set_integer: int,
         number_of_replicas: int = 1,
         verbose: bool = False):
     """
@@ -75,7 +78,9 @@ def run_replica_method(
         model_file_name = f"{current_replica_name}.h5"
 
         # (1.4): Create the directory for the replica:
-        directory_for_model_data = find_directory()
+        did_we_create_replica_directory = create_replica_directories(kinematic_set_integer, replica_number)
+        did_we_create_replica_model_directory = create_replica_model_directories(kinematic_set_integer, replica_number)
+        did_we_create_replica_plots_directory = create_replica_plots_directories(kinematic_set_integer, replica_number)
 
         # (2): Begin timing the replica time:
         start_time_in_milliseconds = datetime.datetime.now().replace(microsecond = 0)
@@ -99,9 +104,11 @@ def run_replica_method(
         # (7): Actually run the Replica:
         neural_network, neural_network_history = run_DNN_replica(training_x_data, training_y_data, testing_x_data, testing_y_data)
 
+        directory_for_replica_model = 
+
         # (9): Hopefully (8) worked, then just save the data there:
         neural_network.save(
-            f"{directory_for_model_data}/{model_file_name}",
+            directory_for_replica_model,
             save_format = 'h5'
         )
 

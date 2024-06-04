@@ -22,14 +22,14 @@ def extraction(
         number_of_replicas: int,
         verbose: bool = False):
     
-    # (1: Get the current working directory where `main.py` is running in:
+    # (1): Get the current working directory where `main.py` is running in:
     current_working_directory = os.getcwd()
 
     # (2): Construct the filepath to the data -- should be in `data/dataframe_path.csv`:
     possible_data_path = f"{_DIRECTORY_DATA}\\{kinematics_dataframe_path}"
 
     if verbose:
-        print(f"> Possible path to /data is: {possible_data_path}")
+        print(f"> Possible path to \\data is: {possible_data_path}")
 
     # (3): Now, check if the kinematics is actually there:
     kinematics_dataframe_file_path = find_directory(current_working_directory, possible_data_path)
@@ -46,9 +46,10 @@ def extraction(
     # (6): We creat the kinematic set directory:
     create_kinematic_set_directories(kinematic_set_number)
 
-    # # (1.6): Run the Replica Method. This performs the loop over N replicas:
-    # trained_neural_network = run_replica_method(
-    #     kinematics_dataframe,
-    #     fixed_kinematic_set_dataframe,
-    #     number_of_replicas,
-    #     verbose)
+    # (7): Run the Replica Method. This performs the loop over N replicas:
+    trained_neural_network = run_replica_method(
+        kinematics_dataframe,
+        fixed_kinematic_set_dataframe,
+        kinematic_set_number,
+        number_of_replicas,
+        verbose)
