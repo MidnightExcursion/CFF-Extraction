@@ -13,6 +13,22 @@ The Proton, as we understand it, has a half-integer spin (1/2). The observation 
 
 Use a DNN approach to try to find the functional form of the Compton Form Factors (CFFs).
 
+# The "Chronology" of the Code:
+
+1. Verify there Exists Data:
+
+    1.1. We first check to see if there provided argument for `-d` (filepath) actually has something at that filepath.
+
+    1.2. Then, we see if we can read that data with Pandas' `read_csv()` function.
+
+    1.3. Attempt to partition the entire dataframe into a smaller one based on the parameter for the `kin` argument, which is just an integer that refers to the kinematic set of the data, and is represented in the data with the column `['set']`.
+
+2. Begin the Replica Method:
+
+    2.1. Verify intact Directory Structure:
+
+        2.1.1. 
+
 # The Replica Method Summarized:
 
 ## The "Chronology" of the Procedure:

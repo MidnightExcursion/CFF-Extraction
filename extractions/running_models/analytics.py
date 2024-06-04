@@ -58,7 +58,7 @@ def perform_replica_analytics(entire_dataframe, trained_neural_network):
     
     print(predicted_cross_sections)
 
-def plot_data(x_data, y_data, plot_title = "", x_label = "", y_label = ""):
+def construct_plot_data(x_data, y_data, plot_title = "", x_label = "", y_label = ""):
     
     # (1): Set up the Figure instance
     figure_instance = plt.figure(figsize = (18, 6))

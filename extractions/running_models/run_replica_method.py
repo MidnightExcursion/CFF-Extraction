@@ -17,13 +17,13 @@ from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from utilities.data_handling.split_ann_data import split_data
 from utilities.generation.generate_pseudodata import generate_replica_data
 
-from utilities.directories.searching_directories import find_directory
+from utilities.directories.handling_directories import find_directory
 
-from extractions.running_models.analytics import perform_replica_analytics, plot_data
+from extractions.running_models.analytics import perform_replica_analytics, construct_plot_data
 from extractions.running_models.run_replica import run_DNN_replica
 from extractions.running_models.obtain_replica_results import obtain_replica_results
 
-from statics.strings.static_strings import _DIRECTORY_EXTRACTIONS, _DIRECTORY_EXTRACTIONS_MODELS_, _DIRECTORY_EXTRACTIONS__MODELS_KINEMATIC_SETS
+from statics.strings.static_strings import _DIRECTORY_EXTRACTIONS, _DIRECTORY_EXTRACTIONS_MODELS_, _DIRECTORY_EXTRACTIONS_MODELS_KINEMATIC_SETS
 
 from statics.strings.static_strings import _COLUMN_NAME_X_BJORKEN
 from statics.strings.static_strings import _COLUMN_NAME_Q_SQUARED
@@ -65,6 +65,18 @@ def run_replica_method(
     # (1): Begin iterating over the replicas:
     for replica_index in range(number_of_replicas):
 
+        # (1.1): Obtain the replica number by adding 1 to the index:
+        replica_number = replica_index + 1
+
+        # (1.2): Propose a replica name:
+        current_replica_name = f"replica_{replica_number}"
+
+        # (1.3): Immediately construct the filetype for the replica:
+        model_file_name = f"{current_replica_name}.h5"
+
+        # (1.4): Create the directory for the replica:
+        directory_for_model_data = find_directory()
+
         # (2): Begin timing the replica time:
         start_time_in_milliseconds = datetime.datetime.now().replace(microsecond = 0)
         
@@ -87,16 +99,6 @@ def run_replica_method(
         # (7): Actually run the Replica:
         neural_network, neural_network_history = run_DNN_replica(training_x_data, training_y_data, testing_x_data, testing_y_data)
 
-        # (6): Obtain the replica number by adding 1 to the index:
-        replica_number = replica_index + 1
-
-        # (7): Propose a replica name:
-        model_file_name = f"replica_{replica_number}.h5"
-
-        # (8): Propose a file path to save the replica data and then just find it:
-        possible_data_path = f"{_DIRECTORY_EXTRACTIONS}\\{_DIRECTORY_EXTRACTIONS_MODELS_}//{_DIRECTORY_EXTRACTIONS__MODELS_KINEMATIC_SETS}"
-        directory_for_model_data = find_directory(os.getcwd(), possible_data_path)
-
         # (9): Hopefully (8) worked, then just save the data there:
         neural_network.save(
             f"{directory_for_model_data}/{model_file_name}",
@@ -116,7 +118,7 @@ def run_replica_method(
 
         print(neural_network_history.history['loss'])
 
-        plot_data(
+        construct_plot_data(
             x_data = np.linspace(0, len(neural_network_history.history['loss']), _HYPERPARAMETER_NUMBER_OF_EPOCHS),
             y_data = neural_network_history.history['loss'],
             plot_title = "Loss",
