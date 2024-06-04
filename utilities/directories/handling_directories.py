@@ -105,6 +105,19 @@ def create_replica_directories(kinematic_set_number, replica_number):
 
     return did_we_create_replica_directory
 
+def find_replica_directories(kinematic_set_number):
+
+    # (1): Get the current working directory where `main.py` is running in:
+    current_working_directory = os.getcwd()
+
+    # (2): Construct the relevant filepath: `data/models/kinematic_sets/kinematic_set_N`
+    kinematic_set_n_filepath = f"{_DIRECTORY_DATA}//{_DIRECTORY_EXTRACTIONS_MODELS_}//{_DIRECTORY_EXTRACTIONS_MODELS_KINEMATIC_SETS}//kinematic_set_{kinematic_set_number}"
+
+    # (3): We create the filepath `root/data/models/kinematic_sets/kinematic_set_N/replica_X`
+    directory_with_replicas = find_directory(current_working_directory, kinematic_set_n_filepath)
+
+    return directory_with_replicas
+
 def create_replica_model_directories(kinematic_set_number, replica_number):
 
     # (1): Get the current working directory where `main.py` is running in:

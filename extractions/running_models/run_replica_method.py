@@ -23,7 +23,7 @@ from utilities.directories.handling_directories import create_replica_plots_dire
 from utilities.directories.handling_directories import find_replica_model_directories
 from utilities.directories.handling_directories import find_replica_plots_directories
 
-from extractions.running_models.analytics import perform_replica_analytics, construct_plot_data
+from extractions.running_models.analytics import construct_plot_data
 from extractions.running_models.run_replica import run_DNN_replica
 from extractions.running_models.obtain_replica_results import obtain_replica_results
 
@@ -123,8 +123,6 @@ def run_replica_method(
 
         print(f"> Replica job finished in {end_time_in_milliseconds - start_time_in_milliseconds}ms.")
 
-        # perform_replica_analytics(kinematic_set_dataframe, neural_network)
-
         ann_training_loss_history_array = neural_network_history.history['loss']
         ann_validation_loss_history_array = neural_network_history.history['val_loss']
 
@@ -147,5 +145,3 @@ def run_replica_method(
             y_label = "Validation Loss")
         
         validation_loss_versus_epoch_plot.savefig(f"{directory_for_replica_plots}/validation_loss.png")
-
-        obtain_replica_results(entire_kinematic_dataframe, neural_network)

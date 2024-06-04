@@ -1,3 +1,5 @@
+import numpy as np
+
 from matplotlib.pyplot import Axes, rc_context
 
 class PlotCustomizer:
@@ -186,6 +188,19 @@ class PlotCustomizer:
 
             # (1): Add the bar plot:
             self.axes_object.bar(x_data, y_data_heights, label = label, color = color)
+
+            if label:
+                self.axes_object.legend()
+
+    def add_histogram(self, x_data, label = "", color = None):
+
+        with rc_context(rc = self._custom_rc_params):
+
+            # (1): Construct the histogram tactically:
+            histogram_counts, histogram_bins =  np.histogram(x_data)
+
+            # (1): Add the bar plot:
+            self.axes_object.stairs(histogram_counts, histogram_bins, label = label, color = color)
 
             if label:
                 self.axes_object.legend()

@@ -1,14 +1,22 @@
 # Native Library | os
 import os
 
+# External Library | NumPy
+import numpy as np
+
 # extractions > running_models > run_replica > run_DNN_replica
 from extractions.running_models.run_replica_method import run_replica_method
+
+from extractions.running_models.analytics import predict_cross_section, predict_cffs
 
 # utilities > data_handling > pandas_reading > read_csv_file_with_pandas
 from utilities.data_handling.pandas_reading import read_csv_file_with_pandas
 
 # utilities > directories > find_directory
-from utilities.directories.handling_directories import find_directory, create_kinematic_set_directories
+from utilities.directories.handling_directories import find_directory, create_kinematic_set_directories, find_replica_directories
+
+# utilities > plotting > construct_cff_histogram
+from utilities.plotting.plot_customizer import construct_cff_histogram
 
 # statics > strings > column names
 from statics.strings.static_strings import _COLUMN_NAME_KINEMATIC_SET
@@ -47,9 +55,28 @@ def extraction(
     create_kinematic_set_directories(kinematic_set_number)
 
     # (7): Run the Replica Method. This performs the loop over N replicas:
-    trained_neural_network = run_replica_method(
+    run_replica_method(
         kinematics_dataframe,
         fixed_kinematic_set_dataframe,
         kinematic_set_number,
         number_of_replicas,
         verbose)
+    
+    # (8): Obtain all the replicas:
+    directory_of_replicas = find_replica_directories(kinematic_set_number)
+    print(directory_of_replicas)
+    print(os.listdir(directory_of_replicas))
+    list_of_all_replicas = os.listdir(find_replica_directories(kinematic_set_number))
+    print(list_of_all_replicas)
+
+    list_of_all_replica_networks = [os.listdir(replica_contents) for replica_contents in list_of_all_replicas]
+    print(list_of_all_replica_networks)
+
+    predicted_cross_sections_per_replica = np.array([])
+
+    predicted_cross_section = predict_cross_section(kinematics_dataframe, list_of_all_replica_networks)
+    predicted_cffs = predict_cffs(kinematics_dataframe, list_of_all_replica_networks)
+
+    construct_cff_histogram(predicted_cffs)
+
+    

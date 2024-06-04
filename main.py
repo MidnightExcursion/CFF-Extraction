@@ -39,9 +39,6 @@ def main(
         number_of_replicas,
         verbose)
 
-        # (5): Run the thing:
-        trained_neural_network = run_replica_method(fixed_kinematic_set_dataframe, number_of_replicas, verbose)
-
     except Exception as ERROR:
         print(f"> Error when running main.py:\n{ERROR}")
         return
