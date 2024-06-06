@@ -1,6 +1,6 @@
 from pandas import DataFrame
 
-from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
+import tensorflow as tf
 
 from extractions.models.dnn_model import deep_neural_network
 
@@ -27,8 +27,8 @@ def run_DNN_replica(
         validation_data = (testing_x_data, testing_y_data),
         epochs = _HYPERPARAMETER_NUMBER_OF_EPOCHS,
         callbacks = [
-            ReduceLROnPlateau(monitor = 'loss', factor = _HYPERPARAMETER_LR_FACTOR, patience = _HYPERPARAMETER_LR_PATIENCE, mode = 'auto'),
-            EarlyStopping(monitor = 'loss',patience = _HYPERPARAMETER_EARLYSTOP_PATIENCE_INTEGER)
+            tf.keras.callbacks.ReduceLROnPlateau(monitor = 'loss', factor = _HYPERPARAMETER_LR_FACTOR, patience = _HYPERPARAMETER_LR_PATIENCE, mode = 'auto'),
+            tf.keras.callbacks.EarlyStopping(monitor = 'loss',patience = _HYPERPARAMETER_EARLYSTOP_PATIENCE_INTEGER)
         ],
         batch_size = _HYPERPARAMETER_BATCH_SIZE,
         verbose = _DNN_VERBOSE_SETTING

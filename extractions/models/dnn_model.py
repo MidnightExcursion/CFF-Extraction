@@ -4,6 +4,7 @@ import tensorflow as tf
 # tf.keras.utils.get_custom_objects().update({'tanhshrink': tanhshrink})
 
 from extractions.models.cross_section_layer import TotalFLayer
+from extractions.models.split_layer import SplitLayer
 
 from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_LEARNING_RATE
 from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_1
@@ -32,7 +33,9 @@ def deep_neural_network():
         
         # (3): Define the five inputs to the network:
         # QQ, x_b, t, phi, k = tf.split(inputs, num_or_size_splits = 5, axis = 1)
-        QQ, x_b, t, phi, k = tf.keras.layers.Lambda(lambda x: tf.split(x, num_or_size_splits=5, axis=1))(inputs)
+        # QQ, x_b, t, phi, k = tf.keras.layers.Lambda(lambda x: tf.split(x, num_or_size_splits=5, axis = 1))(inputs)
+        split_layer = SplitLayer(num_splits=5)
+        QQ, x_b, t, phi, k = split_layer(inputs)
 
         # (4): Combine the kinematics as a single list:
         kinematics = tf.keras.layers.concatenate([QQ, x_b, t])

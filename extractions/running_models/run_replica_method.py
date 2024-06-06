@@ -12,7 +12,7 @@ import numpy as np
 from pandas import DataFrame
 
 # Native Library | TensorFlow
-from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
+import tensorflow as tfa
 
 from utilities.data_handling.split_ann_data import split_data
 from utilities.generation.generate_pseudodata import generate_replica_data

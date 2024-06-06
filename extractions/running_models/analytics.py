@@ -1,5 +1,5 @@
 # External Library | numpy
-from numpy import array
+import numpy as np
 
 # External Library | Matplotlib
 import matplotlib.pyplot as plt
@@ -42,7 +42,7 @@ def predict_cross_section(entire_dataframe, trained_neural_network):
         return trained_neural_network(input_data)
     
     # (5) Plug-and-chug the numbers to get the CROSS SECTION!
-    predicted_cross_sections = array(predict_cross_sections(all_dataframe_kinematics))
+    predicted_cross_sections = np.array(predict_cross_sections(all_dataframe_kinematics))
 
     return predicted_cross_sections
 
@@ -68,13 +68,13 @@ def predict_cffs(entire_dataframe, trained_neural_network):
     
     # (2): Define TensorFlow functions for predicting CFFs:
     @tf.function
-    def predict_cffs(input_data):
+    def predict_cffs_with_tf(input_data):
         output_layer = trained_neural_network.get_layer(name='cff_output_layer').output
         intermediate_model = Model(inputs = trained_neural_network.input, outputs = output_layer)
         return intermediate_model(input_data)
     
     # (4): Plug-and-chug the DF numbers into the trained DNN to get the CFFs!
-    predicted_cffs = array(predict_cffs(all_dataframe_kinematics))
+    predicted_cffs = np.array(predict_cffs_with_tf(all_dataframe_kinematics))
 
     return predicted_cffs
 
@@ -119,15 +119,15 @@ def construct_cff_histogram(histogram_array, plot_title = "", x_label = "", y_la
     plot_customization = PlotCustomizer(
         axis_instance,
         title = plot_title,
-        xlabel = x_label,
-        ylabel = y_label)
+        xlabel = r"{{}}".format(x_label),
+        ylabel = r"{{}}".format(y_label))
     
     # (4): Add data to the Axes Object:
     plot_customization.add_histogram(
         x_data = histogram_array,  
         color = 'black')
     
-    return plot_customization
+    return figure_instance
 
 def replica_average(list_of_replicas):
     """

@@ -195,12 +195,9 @@ class PlotCustomizer:
     def add_histogram(self, x_data, label = "", color = None):
 
         with rc_context(rc = self._custom_rc_params):
-
-            # (1): Construct the histogram tactically:
-            histogram_counts, histogram_bins =  np.histogram(x_data)
-
+            
             # (1): Add the bar plot:
-            self.axes_object.stairs(histogram_counts, histogram_bins, label = label, color = color)
+            self.axes_object.hist(x_data, label = label, bins = 20, edgecolor = 'black', alpha = 0.7, color = 'lightblue')
 
             if label:
                 self.axes_object.legend()

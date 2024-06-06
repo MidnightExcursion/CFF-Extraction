@@ -4,6 +4,9 @@ import os
 # Native Library | errno
 import errno
 
+# Native Library | pathlib
+from pathlib import Path
+
 # statics > strings > directory names
 from statics.strings.static_strings import _DIRECTORY_DATA
 from statics.strings.static_strings import _DIRECTORY_EXTRACTIONS_MODELS_
@@ -105,8 +108,30 @@ def create_replica_directories(kinematic_set_number, replica_number):
 
     return did_we_create_replica_directory
 
-def find_replica_directories(kinematic_set_number):
+def find_replica_directories(kinematic_set_number: int):
+    """
+    # Description:
 
+    We are looking for the directory with all the replicas. For example,
+    it is looking for the following (static) folders: `replica_1/`, `replica_2/`...
+
+    base/
+        |-- data/
+            |-- models/
+                |-- kinematic_sets/
+                    |-- replica_1/
+                    
+                    |-- replica_2/
+                    ...
+
+    # Arguments:
+
+    kinematic_set_number: int
+
+    # Returns:
+
+    directory_with_replicas: path??
+    """
     # (1): Get the current working directory where `main.py` is running in:
     current_working_directory = os.getcwd()
 
@@ -165,3 +190,23 @@ def find_replica_plots_directories(kinematic_set_number, replica_number):
     did_we_create_replica_plots_directory = find_directory(current_working_directory, replica_X_plots_filepath)
 
     return did_we_create_replica_plots_directory
+
+def find_all_model_paths(kinematic_set_number):
+    """
+    """
+
+    # (1): Get the current working directory where `main.py` is running in:
+    current_working_directory = os.getcwd()
+
+    # (2): Construct the base path:
+    base_path = Path(current_working_directory) / _DIRECTORY_DATA / _DIRECTORY_EXTRACTIONS_MODELS_ / _DIRECTORY_EXTRACTIONS_MODELS_KINEMATIC_SETS / f"{kinematic_set_number}"
+
+    print(base_path)
+    print(base_path.glob('replica_*/model/*.keras'))
+
+    model_paths = []
+
+    for replica_directory in base_path.glob('replica_*/model/*.keras'):
+        model_paths.append(replica_directory)
+
+    return model_paths
