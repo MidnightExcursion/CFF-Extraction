@@ -1,5 +1,8 @@
 import tensorflow as tf
 
+from tensorflow.keras.layers import Input, Concatenate, Dense, Lambda
+from tensorflow.keras.models import Model
+
 # from tensorflow_addons.activations import tanhshrink
 # tf.keras.utils.get_custom_objects().update({'tanhshrink': tanhshrink})
 
@@ -13,13 +16,26 @@ from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUM
 from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_4
 from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_5
 
-def deep_neural_network():
+def cff_dnn_submodel():
 
-    print('fuci')
-    
     try:
 
-        print('cock')
+        # (4): We now package together the kinematic-to-CFF model:
+        tfCFFModel = Model(inputs = input_kinematics_cffs, outputs = output_cffs, name = "cff-model")
+
+        print(tfCFFModel.summary())
+
+        # (6): Return the model:
+        return tfCFFModel
+
+    except Exception as ERROR:
+        print(f"> Error in constructing and compiling the DNN CFF submodel:\n{ERROR}")
+
+        return 0.
+
+def full_cross_section_dnn_model():
+    
+    try:
 
         # (1): Initialize the Network with Uniform Random Sampling: [-0.1, -0.1]:
         initializer = tf.keras.initializers.RandomUniform(
@@ -28,39 +44,40 @@ def deep_neural_network():
             seed = None)
 
         # (2) Make the TF Input Layer:
-        inputs = tf.keras.Input(shape=(5, ), name = 'input_layer')
-        print(inputs)
-        
-        # (3): Define the five inputs to the network:
-        # QQ, x_b, t, phi, k = tf.split(inputs, num_or_size_splits = 5, axis = 1)
-        # QQ, x_b, t, phi, k = tf.keras.layers.Lambda(lambda x: tf.split(x, num_or_size_splits=5, axis = 1))(inputs)
-        split_layer = SplitLayer(num_splits=5)
-        QQ, x_b, t, phi, k = split_layer(inputs)
+        input_kinematics = Input(shape = (5, ), name = 'input_layer')
+        # QQ, x_b, t, phi, k = tf.split(input_kinematics, num_or_size_splits = 5, axis = 1)
 
-        # (4): Combine the kinematics as a single list:
-        kinematics = tf.keras.layers.concatenate([QQ, x_b, t])
+        QQ = Lambda(lambda x: x[:, 0:1])(input_kinematics)
+        x_b = Lambda(lambda x: x[:, 1:2])(input_kinematics)
+        t = Lambda(lambda x: x[:, 2:3])(input_kinematics)
+        phi = Lambda(lambda x: x[:, 3:4])(input_kinematics)
+        k = Lambda(lambda x: x[:, 4:5])(input_kinematics)
 
-        # (5): Define the Model Architecture:
-        x1 = tf.keras.layers.Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_1, activation = "relu", kernel_initializer = initializer)(kinematics)
-        x2 = tf.keras.layers.Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_2, activation = "tanh", kernel_initializer = initializer)(x1)
-        x3 = tf.keras.layers.Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_3, activation = "relu", kernel_initializer = initializer)(x2)
-        x4 = tf.keras.layers.Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_4, activation = "relu", kernel_initializer = initializer)(x3)
-        outputs = tf.keras.layers.Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_5, activation = "linear", kernel_initializer = initializer, name = 'cff_output_layer')(x4)
+        input_kinematics_subnet = Concatenate(axis=1)([QQ, x_b, t])
+    
+        # (3): Define the Model Architecture:
+        x1 = Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_1, activation = "relu", kernel_initializer = initializer)(input_kinematics_subnet)
+        x2 = Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_2, activation = "tanh", kernel_initializer = initializer)(x1)
+        x3 = Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_3, activation = "relu", kernel_initializer = initializer)(x2)
+        x4 = Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_4, activation = "relu", kernel_initializer = initializer)(x3)
+        output_cffs = Dense(_HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_5, activation = "linear", kernel_initializer = initializer, name = 'cff_output_layer')(x4)
 
-        # (6): We need both the Kinematics and the CFFs to evaluate the cross section:
-        total_FInputs = tf.keras.layers.concatenate([inputs, outputs], axis = 1)
+        # # (4): Combine the kinematics as a single list:
+        total_FInputs = Concatenate(axis = 1)([input_kinematics, output_cffs])
 
-        # (7): Compute, algorithmically, the cross section:
-        TotalF = TotalFLayer(name = 'TotalFLayer')(total_FInputs)
+        # # (8): Compute, algorithmically, the cross section:
+        TotalF = TotalFLayer()(total_FInputs)
 
-        # (8): Define the model as as Keras Model:
-        tfCrossSectionModel = tf.keras.Model(inputs=inputs, outputs = TotalF, name = "tfmodel")
+        # # (9): Define the model as as Keras Model:
+        tfCrossSectionModel = Model(inputs = input_kinematics, outputs = TotalF, name = "cross-section-model")
 
-        # (9): Compile the model:
+        print(tfCrossSectionModel.summary())
+
+        # (9): Compile the model with a fixed learning rate using Adam and a Loss of MSE:
         tfCrossSectionModel.compile(
             optimizer = tf.keras.optimizers.Adam(_HYPERPARAMETER_LEARNING_RATE),
             loss = tf.keras.losses.MeanSquaredError()
-        )
+        )   
 
         # (10): Return the model:
         return tfCrossSectionModel

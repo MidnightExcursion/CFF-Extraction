@@ -10,7 +10,7 @@ import tensorflow as tf
 # extractions > running_models > run_replica > run_DNN_replica
 from extractions.running_models.run_replica_method import run_replica_method
 
-from extractions.running_models.analytics import predict_cross_section, predict_cffs, construct_cff_histogram
+from extractions.running_models.analytics import predict_cross_section, predict_cffs, construct_cff_histogram, construct_cross_section_plot
 
 # utilities > data_handling > pandas_reading > read_csv_file_with_pandas
 from utilities.data_handling.pandas_reading import read_csv_file_with_pandas
@@ -23,7 +23,7 @@ from utilities.directories.handling_directories import find_replica_model_direct
 from utilities.directories.handling_directories import find_all_model_paths
 
 # statics > strings > column names
-from statics.strings.static_strings import _COLUMN_NAME_KINEMATIC_SET
+from statics.strings.static_strings import _COLUMN_NAME_KINEMATIC_SET, _COLUMN_NAME_AZIMUTHAL_PHI
 
 # statics > strings > directory names
 from statics.strings.static_strings import _DIRECTORY_DATA
@@ -68,17 +68,24 @@ def extraction(
     
     # (8): Obtain all the replicas:
 
+    print('fuk')
+
     # list_of_paths_to_replicas = find_all_model_paths(kinematic_set_number)
     list_of_directories_of_replicas = os.listdir(find_replica_directories(kinematic_set_number))
+    print('fuk')
     list_of_all_replica_models = [os.listdir(find_replica_model_directories(kinematic_set_number, replica_index + 1))[0] for replica_index, _ in enumerate(list_of_directories_of_replicas)]
+    print('fuk')
     paths_to_all_replica_models = [find_replica_model_directories(kinematic_set_number, replica_index + 1) for replica_index, _ in enumerate(list_of_directories_of_replicas)]
 
-    cross_section_layers = [tf.keras.models.load_model(f"{filepath}/replica_{replica_index + 1}.keras") for replica_index, filepath in enumerate(paths_to_all_replica_models)]
+    print('fuk')
+    cross_section_layers = [tf.keras.models.load_model(f"{filepath}/replica_{replica_index + 1}.keras", safe_mode = False) for replica_index, filepath in enumerate(paths_to_all_replica_models)]
     print(cross_section_layers)
 
+    print('fuk')
     predicted_cross_section = [predict_cross_section(kinematics_dataframe, tensorflow_model) for tensorflow_model in cross_section_layers]
     predicted_cffs = [predict_cffs(kinematics_dataframe, tensorflow_model) for tensorflow_model in cross_section_layers]
 
+    print('fuk')
     print(predicted_cffs)
     print(predicted_cffs[0])
     print(predicted_cffs[1])
@@ -87,7 +94,7 @@ def extraction(
     cff_histogram_1 = construct_cff_histogram(
         predicted_cffs[0],
         plot_title = f"Kinematic Set {kinematic_set_number} | CFF1, Histogram (from Local)\nMean: {np.mean(predicted_cffs)}, Std Dev: {np.std(predicted_cffs)}')",
-        x_label = '\mathcal\{F\}',
+        x_label = 'F',
         y_label = 'Frequency')
     
     cff_histogram_1.savefig('cff1.png')
@@ -95,7 +102,7 @@ def extraction(
     cff_histogram_2 = construct_cff_histogram(
         predicted_cffs[1],
         plot_title = f"Kinematic Set {kinematic_set_number} | CFF2, Histogram (from Local)\nMean: {np.mean(predicted_cffs)}, Std Dev: {np.std(predicted_cffs)}')",
-        x_label = '\mathcal\{F\}',
+        x_label = 'F',
         y_label = 'Frequency')
     
     cff_histogram_2.savefig('cff2.png')
@@ -103,7 +110,16 @@ def extraction(
     cff_histogram_3 = construct_cff_histogram(
         predicted_cffs[3],
         plot_title = f"Kinematic Set {kinematic_set_number} | CFF3, Histogram (from Local)\nMean: {np.mean(predicted_cffs)}, Std Dev: {np.std(predicted_cffs)}')",
-        x_label = '\mathcal\{F\}',
+        x_label = 'F',
         y_label = 'Frequency')
     
     cff_histogram_3.savefig('cff3.png')
+
+    cross_section_plot = construct_cross_section_plot(
+        predicted_cross_section,
+        fixed_kinematic_set_dataframe[_COLUMN_NAME_AZIMUTHAL_PHI],
+        plot_title = f"Kinematic Set {kinematic_set_number} | CFF3, Histogram (from Local)\nMean: {np.mean(predicted_cffs)}, Std Dev: {np.std(predicted_cffs)}')",
+        x_label = '\mathcal\{F\}',
+        y_label = 'Frequency')
+    
+    cross_section_plot.savefig('cff3.png')

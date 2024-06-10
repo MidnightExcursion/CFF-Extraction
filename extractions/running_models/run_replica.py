@@ -2,7 +2,7 @@ from pandas import DataFrame
 
 import tensorflow as tf
 
-from extractions.models.dnn_model import deep_neural_network
+from extractions.models.dnn_model import cff_dnn_submodel, full_cross_section_dnn_model
 
 from statics.strings.static_strings import _HYPERPARAMETER_NUMBER_OF_EPOCHS
 from statics.strings.static_strings import _HYPERPARAMETER_BATCH_SIZE
@@ -17,11 +17,11 @@ def run_DNN_replica(
         testing_x_data: DataFrame,
         testing_y_data: DataFrame):
 
-    # (1): Initialize the DNN -- Look at this function to see how the DNN is customized"
-    neural_network = deep_neural_network()
+    # (1): iNITIALIZE THE FULL MODEL:
+    full_cross_section_model = full_cross_section_dnn_model()
     
     # (2): Fit the Model:
-    neural_network_training_history = neural_network.fit(
+    neural_network_training_history = full_cross_section_model.fit(
         training_x_data,
         training_y_data,
         validation_data = (testing_x_data, testing_y_data),
@@ -35,4 +35,4 @@ def run_DNN_replica(
     )
 
     # (3): Return the history/diagnostic data from the training:
-    return neural_network, neural_network_training_history
+    return full_cross_section_model, neural_network_training_history
