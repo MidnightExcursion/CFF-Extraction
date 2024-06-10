@@ -16,23 +16,6 @@ from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUM
 from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_4
 from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_NEURONS_LAYER_5
 
-def cff_dnn_submodel():
-
-    try:
-
-        # (4): We now package together the kinematic-to-CFF model:
-        tfCFFModel = Model(inputs = input_kinematics_cffs, outputs = output_cffs, name = "cff-model")
-
-        print(tfCFFModel.summary())
-
-        # (6): Return the model:
-        return tfCFFModel
-
-    except Exception as ERROR:
-        print(f"> Error in constructing and compiling the DNN CFF submodel:\n{ERROR}")
-
-        return 0.
-
 def full_cross_section_dnn_model():
     
     try:

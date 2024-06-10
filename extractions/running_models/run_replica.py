@@ -16,6 +16,10 @@ def run_DNN_replica(
         training_y_data: DataFrame,
         testing_x_data: DataFrame,
         testing_y_data: DataFrame):
+    """
+    # Description:
+    Run a single DNN replica.
+    """
 
     # (1): iNITIALIZE THE FULL MODEL:
     full_cross_section_model = full_cross_section_dnn_model()
