@@ -25,7 +25,6 @@ from utilities.directories.handling_directories import find_replica_plots_direct
 
 from extractions.running_models.analytics import construct_plot_data
 from extractions.running_models.run_replica import run_DNN_replica
-from extractions.running_models.obtain_replica_results import obtain_replica_results
 
 from statics.strings.static_strings import _DIRECTORY_EXTRACTIONS, _DIRECTORY_EXTRACTIONS_MODELS_, _DIRECTORY_EXTRACTIONS_MODELS_KINEMATIC_SETS
 

@@ -2,7 +2,7 @@ from pandas import DataFrame
 
 import tensorflow as tf
 
-from extractions.models.dnn_model import cff_dnn_submodel, full_cross_section_dnn_model
+from extractions.models.dnn_model import full_cross_section_dnn_model
 
 from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_EPOCHS
 from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_BATCH_SIZE
