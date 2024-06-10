@@ -124,8 +124,7 @@ def construct_cff_histogram(histogram_array, plot_title = "", x_label = "", y_la
     
     # (4): Add data to the Axes Object:
     plot_customization.add_histogram(
-        x_data = histogram_array,  
-        color = 'black')
+        x_data = histogram_array)
     
     return figure_instance
 

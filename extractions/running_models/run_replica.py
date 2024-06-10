@@ -4,12 +4,12 @@ import tensorflow as tf
 
 from extractions.models.dnn_model import cff_dnn_submodel, full_cross_section_dnn_model
 
-from statics.strings.static_strings import _HYPERPARAMETER_NUMBER_OF_EPOCHS
-from statics.strings.static_strings import _HYPERPARAMETER_BATCH_SIZE
-from statics.strings.static_strings import _HYPERPARAMETER_LR_PATIENCE
-from statics.strings.static_strings import _HYPERPARAMETER_LR_FACTOR
-from statics.strings.static_strings import _HYPERPARAMETER_EARLYSTOP_PATIENCE_INTEGER
-from statics.strings.static_strings import _DNN_VERBOSE_SETTING
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_EPOCHS
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_BATCH_SIZE
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_LR_PATIENCE
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_LR_FACTOR
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_EARLYSTOP_PATIENCE_INTEGER
+from statics.model_architecture.model_hyperparameters import _DNN_VERBOSE_SETTING
 
 def run_DNN_replica(
         training_x_data: DataFrame,

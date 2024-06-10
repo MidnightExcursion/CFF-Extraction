@@ -192,12 +192,14 @@ class PlotCustomizer:
             if label:
                 self.axes_object.legend()
 
-    def add_histogram(self, x_data, label = "", color = None):
+    def add_histogram(self, x_data, label = "", color = 'lightblue'):
 
         with rc_context(rc = self._custom_rc_params):
+
+            print(x_data)
             
             # (1): Add the bar plot:
-            self.axes_object.hist(x_data, label = label, bins = 20, edgecolor = 'black', alpha = 0.7, color = 'lightblue')
+            self.axes_object.hist(x_data, label = label, bins = 50, edgecolor = 'black', alpha = 0.7, color = color)
 
             if label:
                 self.axes_object.legend()

@@ -37,12 +37,7 @@ from statics.strings.static_strings import _COLUMN_NAME_LEPTON_MOMENTUM
 from statics.strings.static_strings import _COLUMN_NAME_CROSS_SECTION
 from statics.strings.static_strings import _COLUMN_NAME_CROSS_SECTION_ERROR
 
-from statics.strings.static_strings import _HYPERPARAMETER_NUMBER_OF_EPOCHS
-from statics.strings.static_strings import _HYPERPARAMETER_BATCH_SIZE
-from statics.strings.static_strings import _HYPERPARAMETER_LR_PATIENCE
-from statics.strings.static_strings import _HYPERPARAMETER_LR_FACTOR
-from statics.strings.static_strings import _HYPERPARAMETER_EARLYSTOP_PATIENCE_INTEGER
-from statics.strings.static_strings import _DNN_VERBOSE_SETTING
+from statics.model_architecture.model_hyperparameters import _HYPERPARAMETER_NUMBER_OF_EPOCHS
 
 # DataFrame Columns
 from statics.strings.static_strings import _COLUMN_NAME_KINEMATIC_SET
