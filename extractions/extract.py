@@ -82,14 +82,16 @@ def extraction(
     print(cross_section_layers)
 
     print('fuk')
-    predicted_cross_section = [predict_cross_section(kinematics_dataframe, tensorflow_model) for tensorflow_model in cross_section_layers]
-    predicted_cffs = [predict_cffs(kinematics_dataframe, tensorflow_model) for tensorflow_model in cross_section_layers]
+    # predicted_cross_section = [predict_cross_section(kinematics_dataframe, tensorflow_model) for tensorflow_model in cross_section_layers]
+    # predicted_cffs = [predict_cffs(kinematics_dataframe, tensorflow_model) for tensorflow_model in cross_section_layers]
+
+    predicted_cross_section = []
+    predicted_cffs = []
 
     print('fuk')
-    print(predicted_cffs)
-    print(predicted_cffs[0])
-    print(predicted_cffs[1])
-    print(predicted_cffs[2])
+    for tensorflow_model in cross_section_layers:
+        predicted_cffs.append(predict_cffs(kinematics_dataframe, tensorflow_model))
+        predicted_cross_section.append(predict_cffs(kinematics_dataframe, tensorflow_model))
 
     cff_histogram_1 = construct_cff_histogram(
         predicted_cffs[0],
@@ -108,12 +110,20 @@ def extraction(
     cff_histogram_2.savefig('cff2.png')
 
     cff_histogram_3 = construct_cff_histogram(
-        predicted_cffs[3],
+        predicted_cffs[2],
         plot_title = f"Kinematic Set {kinematic_set_number} | CFF3, Histogram (from Local)\nMean: {np.mean(predicted_cffs)}, Std Dev: {np.std(predicted_cffs)}')",
         x_label = 'F',
         y_label = 'Frequency')
     
     cff_histogram_3.savefig('cff3.png')
+
+    cff_histogram_4 = construct_cff_histogram(
+        predicted_cffs[3],
+        plot_title = f"Kinematic Set {kinematic_set_number} | CFF3, Histogram (from Local)\nMean: {np.mean(predicted_cffs)}, Std Dev: {np.std(predicted_cffs)}')",
+        x_label = 'F',
+        y_label = 'Frequency')
+    
+    cff_histogram_4.savefig('cff4.png')
 
     cross_section_plot = construct_cross_section_plot(
         predicted_cross_section,
@@ -122,4 +132,4 @@ def extraction(
         x_label = '\mathcal\{F\}',
         y_label = 'Frequency')
     
-    cross_section_plot.savefig('cff3.png')
+    cross_section_plot.savefig('crosssection.png')
